@@ -177,6 +177,23 @@ class CustomerBuilderTest extends TestCase
     /**
      * @throws LocalizedException
      */
+    public function testLocalizedAddressWithoutRegionFormatter(): void
+    {
+        $customerFixture = new CustomerFixture(
+            CustomerBuilder::aCustomer()->withAddresses(
+                AddressBuilder::anAddress('en_GB')->asDefaultBilling()->asDefaultShipping()
+            )->build()
+        );
+        $this->customers[] = $customerFixture;
+
+        $customer = $this->customerRepository->getById($customerFixture->getId());
+        $address = $customer->getAddresses()[0];
+        self::assertSame('GB', $address->getCountryId());
+    }
+
+    /**
+     * @throws LocalizedException
+     */
     public function testCompanyAddress(): void
     {
         $vatId = '1112223334';
