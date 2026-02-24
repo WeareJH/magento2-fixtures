@@ -193,7 +193,11 @@ class AddressBuilder
         try {
             $region = $faker->province;
         } catch (InvalidArgumentException $exception) {
-            $region = $faker->state;
+            try {
+                $region = $faker->state;
+            } catch (InvalidArgumentException $exception) {
+                $region = null;
+            }
         }
 
         $regionId = $objectManager->create(Region::class)->loadByName($region, $countryCode)->getId();
